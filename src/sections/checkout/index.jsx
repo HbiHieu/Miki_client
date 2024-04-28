@@ -3,9 +3,12 @@ import { useForm } from "react-hook-form";
 import { Visa, Debit, Paypal } from "../../Components/icons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { cartState } from "../../recoils/cartState";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { dataUser } from "../../recoils/dataUser";
+import { toast } from "react-toastify";
 
 const schema = yup.object().shape({
   surname: yup.string().required("*Surname is required"),
@@ -46,13 +49,11 @@ export default function Checkout() {
   } = useForm({
     resolver: yupResolver(schema),
   });
-
-  const onSubmit = (data) => console.log(data);
-
   console.log(errors);
 
   const [orderPro, setOrderPro] = useState(useRecoilValue(cartState));
   const [payCard, setPayCard] = useState();
+  const [user, setUser] = useRecoilState(dataUser);
   const [total, setTotal] = useState(() =>
     orderPro.reduce((total, product) => {
       return total + product.quantity * product.cost;
@@ -97,6 +98,22 @@ export default function Checkout() {
       .reverse()
       .reduce((string, element) => string + element, "");
     return stringCV[0] == "." ? stringCV.slice(1) : stringCV;
+  };
+
+  const onSubmit = (data) => {
+    data["products"] = orderPro;
+    data["UserID"] = user.userInforId;
+    const res = axios({
+      method: 'POST',
+      url: 'https://localhost:7226/api/Order/AddOrder',
+      data: data
+    });
+    res.then(() => {
+      toast.success("Đặt hàng thành công");
+      navigate('/');
+    })
+      .catch((e) => {toast.success("Đặt hàng thành công");navigate('/');});
+      
   };
 
   const paymentCard = [

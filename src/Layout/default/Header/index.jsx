@@ -24,6 +24,7 @@ export function Header() {
     setUser(null);
     setCart([]);
     localStorage.clear();
+    toast.success(`Đănng xuất thành công`);
   };
   const [isSSR, setIsSSR] = useState(true);
 
@@ -137,7 +138,7 @@ export function Header() {
             </div>
           </div>
           <div className="flex ml-[25px]">
-            <Link to="/cart">
+            <Link to="/cart" style={{display:'flex' , alignItems:'center'}}>
               <CartIcon />
             </Link>
             {!isSSR ? (
@@ -154,6 +155,7 @@ export function Header() {
                 <UserIcon
                   className={"ml-[35px] cursor-pointer hover:opacity-60"}
                 />
+                <p className="w-[150px]">{user?.firstName || ''}</p>
                 <div className="absolute bottom-[-100px] right-[-52px] z-20 hidden group-hover:block animate-growth">
                   <div className="border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent w-[0px] h-[0px] border-b-[12px] border-b-primary_5 shadow-lg ml-[120px]"></div>
                   <ul className="shadow-xl cursor-pointer bg-primary_5">

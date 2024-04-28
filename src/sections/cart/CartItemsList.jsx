@@ -1,6 +1,7 @@
 import React from 'react'
 import AddAndRemoveItems from '../../Components/AddAndRemoveItems';
 import { IconXX } from '../../Components/icons';
+import { Link } from 'react-router-dom';
 
 export default function CartItemsList({ items, setItemState }) {
 
@@ -30,7 +31,9 @@ export default function CartItemsList({ items, setItemState }) {
               <img src={item?.picture} alt="img" className='object-cover object-center duration-200 hover:scale-125' />
             </div>
             <div className=''>
+              <Link to={`/products/${item.productId}`}>
               <div className='text-xl font-bold'>{item?.name}</div>
+              </Link>
               <div className='text-sm text-[#707070] mt-2l;l;l;l;l;'>{`Kích cỡ :${item.size}`}</div>
               <AddAndRemoveItems
                 product={item}

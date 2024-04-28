@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Arrow, FbIcon, TwiterIcon, InstaIcon, TiktokIcon, VectorIcon } from '../../../Components/icons';
 export function Footer() {
   return (
@@ -60,12 +61,18 @@ export function Footer() {
             </div>
             <div className="flex justify-between  mt-[5px]">
               <ul className="ml-[100px] relative">
+                <Link to={'about'}>
                 <li className="absolute font-bold w-[140px] pr-[32px]">Về chúng tôi</li>
+                </Link>
                 <br />
                 <li className="mt-[20px]">Thương hiệu</li>
+                <Link to={'about'}>
                 <li className="absolute mt-[20px]">Lịch sử</li>
+                </Link>
                 <br />
+                <Link to={'/tuyendung'}>
                 <li className="absolute mt-[40px]">Tuyển dụng</li>
+                </Link>
                 <br />
               </ul>
               <ul className="relative ml-[108px]">

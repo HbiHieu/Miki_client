@@ -25,6 +25,7 @@ const schema = yup.object().shape({
     .required("Email hoặc số điện thoại của bạn đang trống!"),
   password: yup.string().trim().required("Mật khẩu của bạn đang trống!"),
 });
+
 export default function LoginFormSection() {
   const setUser = useSetRecoilState(dataUser);
   const navigate = useNavigate();
@@ -71,7 +72,7 @@ export default function LoginFormSection() {
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("expire_at", user.accessExpire.toString());
       localStorage.setItem("userId", user.userInforId);
-      toast.success("Login successfully");
+      toast.success(`Chào mừng ${user.firstName}`);
     });
   };
 
@@ -203,7 +204,7 @@ export default function LoginFormSection() {
                 <Button title={"Đăng nhập"} className="w-full h-[45px] rounded-btnB bg-btn text-white font-bold text-[16px] leading-6 hover:bg-[#0000] hover:text-neutral_1 hover:border-solid hover:border-[1px] hover:border-[#000] mb-5">
                 Đăng nhập
               </Button>
-                <p className="otherLogin">Hoặc đăng nhập bằng</p>
+                {/* <p className="otherLogin">Hoặc đăng nhập bằng</p>
                 <div className="wrapSocialLogin">
                   <div className="fbLogin">
                     <FbLogin />
@@ -213,7 +214,7 @@ export default function LoginFormSection() {
                     <GoogleIcon />
                     Google
                   </div>
-                </div>
+                </div> */}
                 <div className="wrapGotoRegister">
                   <p className="font-medium">Bạn chưa có tài khoản?</p>
                   <Link to="/register">

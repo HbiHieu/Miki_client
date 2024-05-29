@@ -15,7 +15,8 @@ const schema = yup.object().shape({
   email: yup
     .string()
     .required('*Vui lòng nhập email hoặc số điện thoại của bạn')
-    .matches(/^(?:\d{10}|\w+@\w+\.\w{2,3})$/, '*It is not an email or phone number'),
+    .matches(/^(?:\d{10}|\w+@\w+\.\w{2,3})$/, '*It is not an email or phone number'), 
+  phoneNumber : yup.string().required('*Bắt buộc'),  
   dateOfBirth: yup
     .date()
     .nullable()
@@ -24,12 +25,14 @@ const schema = yup.object().shape({
 
   password: yup.string().required('*Vui lòng nhập mật khẩu của bạn').min(6),
   confirmPassword: yup.string().oneOf([yup.ref('password'), null]),
-  agree: yup.boolean().oneOf([true], '*Bạn cần đồng ý với điều khoản của chúng tôi!'),
+  agree: yup.boolean().oneOf([true], '*Bạn cần đồng ý với điều khoản của chúng tôi!')
 });
 
 function RegisterForm() {
   const navigate = useNavigate();
   const [errorState, setError] = useState('');
+  const [otp,setOtp] = useState(null);
+  const [message,setMessage] = useState(undefined);
   const {
     register,
     handleSubmit,
@@ -38,24 +41,40 @@ function RegisterForm() {
     resolver: yupResolver(schema),
   });
 
-  const submitForm = (data) => {
+  const submitForm = async (data) => {
     const user = {
       id: uniqid(),
       email: data.email,
       password: data.password,
-      name: `${data.firstName} ${data.lastName}`
+      name: `${data.firstName} ${data.lastName}` ,
+      phoneNumber : data.phoneNumber
     }
-    const res = axios({
-      method: 'POST',
-      url: 'https://localhost:7226/api/Users/register',
-      data: user
-    });
-    res.then(() => {
-      toast.success("Register successfully");
-      navigate('/login');
-    })
-      .catch((e) => setError(e.response.data.message));
+    if (otp == null)
+    {
+      const res = await axios({
+        method: 'POST',
+        url: 'https://localhost:7226/api/Users/sendOtp',
+        data: user
+      });
+      setMessage("Chúng tôi đã gửi mã OTP đăng ký cho bạn , vui lòng kiểm tra email !");
+    }    
+    else {
+      try {
+        const res = await axios({
+          method: 'POST',
+          url: `https://localhost:7226/api/Users/verifyOTP?Otp=${otp}`,
+          data: user
+        });
+          toast("Đăng ký thành công !");
+          navigate("/login")
+      }
+      catch{
+         toast.error("OTP không hợp lệ");
+      }
+    }
   };
+
+
 
   return (
     <form
@@ -149,7 +168,7 @@ function RegisterForm() {
         <input
           type="text"
           {...register('email')}
-          placeholder="Nhập email hoặc số điện thoại"
+          placeholder="Nhập email"
           className="rounded-lg border-solid
                     border
                     border-primary_1
@@ -168,7 +187,29 @@ function RegisterForm() {
           {errors.email?.message || errorState}
         </p>
       </div>
-
+      <div className="py-3 pt-2">
+        <input
+          type="text"
+          {...register('phoneNumber')}
+          placeholder="Nhập số điện thoại"
+          className="rounded-lg border-solid
+                    border
+                    border-primary_1
+                    w-full
+                    h-[48px]
+                    font-main
+                    font-medium
+                    text-base
+                    leading-6
+                    tracking-[-0.019rem]
+                    text-neutral_3
+                    pl-4
+                    "
+        />
+        <p className="text-[#D2311B] text-base font-medium h-5">
+          {errors.phoneNumber?.message || errorState}
+        </p>
+      </div>
       {/* Password */}
       <div className="py-1">
         <input
@@ -215,8 +256,35 @@ function RegisterForm() {
           {errors?.confirmPassword && '*Xác nhận mật khẩu không đúng'}
         </p>
       </div>
+      {/* OTP*/}
+      <div className="py-1">
+        <input
+          type="text"
+          placeholder="OTP xác thực"
+          name="otp"
+          value={otp}
+          disabled={message == undefined}
+          onChange={(e) => setOtp(e.target.value)}
+          className="rounded-lg border-solid
+                    border
+                    border-primary_1
+                    w-full
+                    h-[48px]
+                    font-main
+                    font-medium
+                    text-base
+                    leading-6
+                    tracking-[-0.019rem]
+                    text-neutral_3
+                    pl-4
+                    "
+        />
+        <p className="text-[#D2311B] text-base font-medium h-5 mb-2">
+          {message}
+        </p>
+      </div>
 
-      <div className="flex pb-3">
+      <div className="flex pb-3 mt-6">
         <input type="checkbox" className="w-6 h-6 cursor-pointer register-checkbox" />
         <p className="font-medium font-main text-base tracking-[-0.019rem] pl-[9px]">
           Nhận thông tin khuyến mãi qua email

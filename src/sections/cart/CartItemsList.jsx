@@ -2,18 +2,44 @@ import React from 'react'
 import AddAndRemoveItems from '../../Components/AddAndRemoveItems';
 import { IconXX } from '../../Components/icons';
 import { Link } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { dataUser } from '../../recoils/dataUser';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
-export default function CartItemsList({ items, setItemState }) {
+export default function 
+CartItemsList({ items, setItemState }) {
 
+  const user = useRecoilValue(dataUser);
   const formatter = new Intl.NumberFormat('vi-VN', {
     style: 'currency',
     currency: 'VND',
     minimumFractionDigits: 0
   })
 
-  const handleDeleteCart = (id) => {
-    const newCart = items.filter((item) => item.productId != id);
-    setItemState(newCart);
+  const handleDeleteCart =  async (id,sizeId,index) => {
+    try {
+      console.log(items);      
+      let idProduct = id;
+      if (!idProduct)
+      {
+        idProduct = items[index].productId;
+      }
+      const respone = await axios({
+        method: 'DELETE',
+        url:`https://localhost:7226/api/Cart?productId=${idProduct}&userId=${user.userInforId}&sizeID=${sizeId}`,
+      });
+      const res = await axios({
+        method: 'GET',
+        url:`https://localhost:7226/api/Cart?userID=${user.userInforId}`,
+      });
+      console.log(res.data)
+      setItemState(res.data);
+      toast.success("Xóa thành công");
+    }
+    catch{
+
+    }
   }
 
   return (
@@ -28,13 +54,13 @@ export default function CartItemsList({ items, setItemState }) {
             '
           >
             <div className='w-[136px] h-[136px] overflow-hidden mr-10'>
-              <img src={item?.picture} alt="img" className='object-cover object-center duration-200 hover:scale-125' />
+              <img src={item?.url} alt="img" className='object-cover object-center duration-200 hover:scale-125' />
             </div>
             <div className=''>
               <Link to={`/products/${item.productId}`}>
               <div className='text-xl font-bold'>{item?.name}</div>
               </Link>
-              <div className='text-sm text-[#707070] mt-2l;l;l;l;l;'>{`Kích cỡ :${item.size}`}</div>
+              <div className='text-sm text-[#707070] mt-2l;l;l;l;l;'>{`Kích cỡ :${item.sizeId + 15}`}</div>
               <AddAndRemoveItems
                 product={item}
                 index={index}
@@ -47,7 +73,7 @@ export default function CartItemsList({ items, setItemState }) {
                 <span
                   className='flex items-center justify-center w-8 h-8 rounded-full hover:bg-neutral_1 hover:text-white hover:cursor-pointer'
                   onClick={() => {
-                    handleDeleteCart(item.productId);
+                    handleDeleteCart(item.productID,item.sizeId,index);
                   }}
                 >
                   <IconXX
@@ -55,7 +81,7 @@ export default function CartItemsList({ items, setItemState }) {
                   />
                 </span>
               </div>
-              <div className='text-2xl font-bold text-primary_2'>{formatter.format((item.cost))}</div>
+              <div className='text-2xl font-bold text-primary_2'>{formatter.format((item.price))}</div>
             </div>
           </div>)
         }

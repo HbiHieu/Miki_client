@@ -54,26 +54,29 @@ export default function LoginFormSection() {
       data: data,
     });
     res
-      .then(() => navigate("/"))
+      .then((rep) => {
+        navigate("/")
+        const dataUser = rep.data.data;
+        console.log(dataUser);
+        const user = {
+          role: dataUser.role,
+          email: dataUser.email,
+          firstName: dataUser.name,
+          userInforId: dataUser.id,
+          accessExpire: dataUser.expire_At,
+          refreshToken: dataUser.refresh_Token,
+          cartId : dataUser.cartId,
+          phoneNumber : dataUser.phoneNumber
+        };
+        setUser(user);
+        const accessToken = dataUser.access_token;
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("expire_at", user.accessExpire.toString());
+        localStorage.setItem("userId", user.userInforId);
+        toast.success(`Chào mừng ${user.firstName}`);
+      }
+    )
       .catch((e) => setError(e.response.data.message));
-
-    res.then((rep) => {
-      const dataUser = rep.data.data;
-      const user = {
-        role: dataUser.role,
-        email: dataUser.email,
-        firstName: dataUser.name,
-        userInforId: dataUser.id,
-        accessExpire: dataUser.expire_At,
-        refreshToken: dataUser.refresh_Token,
-      };
-      setUser(user);
-      const accessToken = dataUser.access_token;
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("expire_at", user.accessExpire.toString());
-      localStorage.setItem("userId", user.userInforId);
-      toast.success(`Chào mừng ${user.firstName}`);
-    });
   };
 
   return (

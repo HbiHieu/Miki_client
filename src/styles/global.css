@@ -12,6 +12,10 @@
   body {
     @apply font-main max-w-[1440px] mx-auto bg-bgm text-neutral_1 scroll-smooth;
   }
+
+  td {
+    padding: 10px;
+  }
   .container {
     @apply px-[152px];
   }

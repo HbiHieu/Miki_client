@@ -22,6 +22,12 @@ export default function MainAdLayout() {
                     <li className='py-3 border-y-[1px] border-solid border-[#5f84ec] font-bold'>Bảng điều khiển</li>
                     <li>
                         <p className='my-3 font-bold text-[#5f84ec]'>CHÍNH</p>
+                        <Link to={'/admin'}>
+                        <div
+                            className='py-3 border-b-[1px] border-solid border-[#5f84ec] cursor-pointer hover:opacity-60'>
+                            Thống kê
+                        </div>
+                        </Link>
                         <div
                             className='py-3 cursor-pointer hover:opacity-60'
                             onClick={
@@ -34,57 +40,28 @@ export default function MainAdLayout() {
                                     }
                                 }
                             }>
-                            Sản phẩm & Banner
+                            Danh mục
                         </div>
                         {option &&
                             (<div className='overflow-hidden'>
                                 <div
                                     className='p-3 text-black bg-white rounded-[5px] my-[5px] duration-100 animate-[down1_0.5s_ease]'>
                                     <ul>
-                                        <li className='text-gray-400'>Sản phẩm & Banner</li>
                                         <Link to='/admin/Products'>
                                             <>
                                                 <li className='p-2 hover:bg-gray-200'>Sản phẩm</li>
                                             </>
                                         </Link>
+                                        <Link to='/admin/Accounts'>
                                         <>
-                                            <li className='p-2 cursor-pointer hover:bg-gray-200'>User</li>
+                                            <li className='p-2 cursor-pointer hover:bg-gray-200'>Tài khoản</li>
                                         </>
-                                        <li className='p-2 cursor-pointer hover:bg-gray-200'>Banner</li>
-                                    </ul>
-                                </div>
-                            </div>)
-                        }
-                        <div
-                            className='py-3 border-b-[1px] border-solid border-[#5f84ec] cursor-pointer hover:opacity-60'
-                            onClick={
-                                () => {
-                                    if (option2 === true) {
-                                        setOption2(false);
-                                    }
-                                    else {
-                                        setOption2(true);
-                                    }
-                                }
-                            }>
-                            Đơn đặt hàng
-                        </div>
-                        {option2 &&
-                            (<div className='overflow-hidden'>
-                                <div
-                                    className='p-3 text-black bg-white rounded-[5px] my-[5px] duration-100 animate-[down1_0.5s_ease]'
-                                >
-                                    <ul>
-                                        <li className='text-gray-400'>Đơn đặt hàng</li>
-                                        <Link to={'/admin/Order/all'}>
-                                            <>
-                                                <li className='p-2 hover:bg-gray-200'>Tất cả</li>
-                                            </>
                                         </Link>
-                                        <li className='p-2 cursor-pointer hover:bg-gray-200'>Chờ xác nhận</li>
-                                        <li className='p-2 cursor-pointer hover:bg-gray-200'>Đang giao</li>
-                                        <li className='p-2 cursor-pointer hover:bg-gray-200'>Đã giao</li>
-                                        <li className='p-2 cursor-pointer hover:bg-gray-200'>Hủy</li>
+                                        <Link to='/admin/Categories'>
+                                        <li className='p-2 cursor-pointer hover:bg-gray-200'>Thể loại</li>
+                                        </Link>                                                         <Link to='/admin/Orders'>
+                                        <li className='p-2 cursor-pointer hover:bg-gray-200'>Đơn hàng</li>
+                                        </Link>                       
                                     </ul>
                                 </div>
                             </div>)

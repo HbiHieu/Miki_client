@@ -34,7 +34,7 @@ export default function ProductDetails() {
   const [imageState, setImageState] = useState(1);
   //handleAddToCart
   const user = useRecoilValue(dataUser);
-  const handleAddToCart = (product) => {
+  const handleAddToCart = async (product) => {
     const item = product.stocks.filter(
       (item) => item.sizeId == +selectSizeState
     )[0];
@@ -48,13 +48,30 @@ export default function ProductDetails() {
     const selectedPro = {
       productId,
       name,
-      cost,
+      price : cost,
       quantity,
-      size,
+      sizeId : size,
       userId,
-      picture,
+      url : picture,
+      cartId : user.cartId ,
     };
-    setCart([...cart, selectedPro]);
+    console.log(cart)
+    let cartItems = cart;
+    const indexHavedItem = cart.findIndex( item => item.productId == productId && item.size == size );
+    if ( indexHavedItem != -1 )
+    {
+      cartItems[indexHavedItem].quantity = quantity + cart[indexHavedItem].quantity;
+    }
+    else {
+      cartItems = [...cart, selectedPro] ;
+    }
+    setCart(cartItems);
+    const respone = await axios({
+      method: 'POST',
+      data : selectedPro,
+      url:`https://localhost:7226/api/Cart`,
+    });
+    console.log(respone);
     setToast(true);
     setTimeout(() => {
       setToast(false);
@@ -72,6 +89,7 @@ export default function ProductDetails() {
         setStock(res.data?.stocks?.[0]);
       };
       fetch();
+      window.scrollTo(0, 0);
     } catch (ex) {
       console.log(ex);
     }
@@ -103,12 +121,8 @@ export default function ProductDetails() {
               <Arrow fill="#626262" />
             </li>
             <li className="flex items-center pl-[4px]">
-              <p className="pr-[4px] text-neutral_2 cursor-pointer">Bông tai</p>
-              <Arrow fill="#626262" />
-            </li>
-            <li className="flex items-center pl-[4px]">
               <p className="pr-[4px] font-bold text-neutral_2 cursor-pointer">
-                Bông tai Elean
+                {product?.name}
               </p>
             </li>
           </ul>

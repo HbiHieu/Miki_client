@@ -11,7 +11,7 @@ export default function CartMain() {
   const [cartItem, setCartItem] = useRecoilState(cartState);
   const user = useRecoilValue(dataUser);
   const totalCost = cartItem?.reduce((total, product) => {
-    return total + product.quantity * product.cost;
+    return total + product.quantity * product.price;
   }, 0);
 
   return (

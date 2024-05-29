@@ -20,7 +20,7 @@ function Register() {
       <div className="bg-bgm overflow-hidden w-[1440px] relative ">
         <div
           className="mx-[152px] my-[120px]
-        w-[1136px] h-[852px]
+        w-[1136px] h-[1000px]
         relative
         bg-[rgba(255, 249, 246, 0.8)]
         rounded-2xl

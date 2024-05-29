@@ -1,16 +1,28 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { AboutSection, BestSellerSection, HeroSection, LatestCollectionSection, ProductCategorySection } from "../sections/main/home"
+import { cartState } from '../recoils/cartState';
+import { dataUser } from '../recoils/dataUser';
+import { useRecoilState } from 'recoil';
+import { ordersState } from '../recoils/ordersState';
 
 function App() {
   
   const [products, setProducts] = useState([]);
+  const [user, setUser] = useRecoilState(dataUser);
+  const [cart, setCart] = useRecoilState(cartState);
+  const [orders,setOrders] = useRecoilState(ordersState);
 
-  useEffect(() => {
-    dataProducts();
+  useEffect( () => {
+    async function fetchData() {
+      await dataProducts();
+      await dataCarts();
+      await dataOrders();
+    }
+    fetchData();
   }, []);
 
-  const dataProducts = async (data) => {
+  const dataProducts = async () => {
     try {
       const res = await axios({
         method: 'GET',
@@ -23,6 +35,35 @@ function App() {
       console.log(err);
     }
   };
+
+  const dataCarts = async () => {
+    try {
+      console.log(user);
+      const res = await axios({
+        method: 'GET',
+        url:`https://localhost:7226/api/Cart?userID=${user.userInforId}`,
+      });
+      setCart(res.data);
+    } catch (err) {
+      setCart([])
+      console.log(err);
+    }
+  };
+
+  const dataOrders = async () => {
+    try {
+      const res = await axios({
+        method: "GET",
+        url: `https://localhost:7226/api/Order?UserID=${user.userInforId}`,
+      });
+      console.log(res.data)
+      setOrders(res.data);
+      console.log('set')
+    }
+    catch(err) {
+      
+    }
+  }
 
   return (
     <div>

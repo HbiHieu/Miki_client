@@ -1,25 +1,43 @@
-import React from 'react'
-import { IconStar } from './icons'
+import React from "react";
+import { Delete, IconStar } from "./icons";
+import Avatar from "react-avatar";
+import { useRecoilValue } from "recoil";
+import { dataUser } from "../recoils/dataUser";
+import axios from "axios";
 
-export default function AvartarChat({src, userName, time, productType}) {
+export default function AvartarChat({ userName,userId, time, content , rating ,commentsId,setUpdate}) {
+  const user = useRecoilValue(dataUser);
+  const handleDeleteComment = async () => {
+    const res = await axios({
+      method:"DELETE",
+      url:`https://localhost:7226/api/Comments?commentId=${commentsId}`
+    });
+    setUpdate( prev => !prev );
+  }
   return (
-    <>
-      <div className='flex mt-[24px]'>
-         <img src={src} alt='anh' className='w-[54px] h-[54px]'/>
-         <div className='ml-[15px]'>
-            <p className="font-medium text-base">{userName}</p>
-            <div className="flex mt-[2px] w-[80px] h-[15px] mr-[8px]">
-                  <IconStar fill="#FBBC05" /> <IconStar fill="#FBBC05" /> <IconStar fill="#A9A9A9" />
-                  <IconStar fill="#A9A9A9" /> <IconStar fill="#A9A9A9" />
-            </div>
-         </div>
+    <div>
+      <div className="flex mt-[24px]">
+        <Avatar size="50" round="1000px" name={userName} />
+        <div className="ml-[15px]">
+          <p className="text-base font-medium">{userName}</p>
+          <div className="flex mt-[2px] w-[80px] h-[15px] mr-[8px]">
+            {
+              [...Array(5)].map( (item,index)=> (
+                <IconStar fill={index+1 > rating ? '#A9A9A9':'#FBBC05'} />
+              ) )
+            }
+          </div>
+        </div>       
+          {
+            user?.userInforId == userId && <span onClick={()=> { handleDeleteComment() }}>
+              <Delete className={'h-5 ml-2 mt-1 cursor-pointer hover:opacity-80'}/>
+            </span> 
+          } 
       </div>
-      <div className='flex ml-[68px]'>
-         <p>{time}</p> 
-         <p className='ml-[4px]'>| Loại sản phẩm:</p>
-         <p>{productType}</p>
+      <div className="flex flex-col ml-[68px]">
+        <p>{content}</p>
+        <p>{time}</p>
       </div>
-    
-    </>
-  )
+    </div>
+  );
 }

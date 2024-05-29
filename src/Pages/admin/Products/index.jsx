@@ -57,6 +57,37 @@ export default function Product() {
         }
     };
 
+    const handleExportExcel = async () => {
+        try {
+            const res = await axios({
+                method: 'GET',
+                url: 'https://localhost:7226/api/Products/ExportExcel',
+                responseType: 'blob', // Ensure responseType is set to 'blob'
+            });
+    
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+            const link = document.createElement('a');
+            link.href = url;
+
+            const contentDisposition = res.headers['content-disposition'];
+            let filename = `ThongKeSanPham_${new Date().toLocaleDateString()}.xlsx`;
+            if (contentDisposition) {
+                const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+                if (filenameMatch.length === 2) {
+                    filename = filenameMatch[1];
+                }
+            }
+    
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (ex) {
+            console.log(ex);
+        }
+    };
+    
+
     //handle of Add
 
     const handleAddProduct = () => {
@@ -163,6 +194,10 @@ export default function Product() {
                         className='p-1 border-[1px] border-solid border-blue-400 text-blue-400 rounded-lg font-bold hover:opacity-80 ml-3'
                         onClick={handleApplyOptions}
                     >Áp dụng</button>
+                    <button
+                    className='p-[5px] mx-2 text-white bg-green-400 rounded-lg hover:opacity-80'
+                    onClick={() => handleExportExcel()}
+                    >Xuất excel thống kê</button>
                 </div>
                 <SortProductsAd
                     setPage={setPage}

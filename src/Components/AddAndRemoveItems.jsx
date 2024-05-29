@@ -5,20 +5,20 @@ import { PlusIcon, MinusIcon } from './icons/Icons_2'
 
 export default function AddAndRemoveItems(props) {
   const { product, index, itemState, setItemState } = props
-  const handleAddProduct = async (indexofPro, method) => {
+  const handleAddProduct = async (indexofProduct, method) => {
     setItemState((prev) =>
       prev.map((pro, index) => {
-        if (index == indexofPro) {
-          let quantity = itemState[indexofPro].quantity
+        if (index == indexofProduct) {
+          let quantity = itemState[indexofProduct].quantity
           if (method == 'remove') {
-            pro = { ...itemState[indexofPro], quantity: itemState[indexofPro].quantity - 1 };
+            pro = { ...itemState[indexofProduct], quantity: itemState[indexofProduct].quantity - 1 };
             quantity -= 1;
           }
           else {
-            pro = { ...itemState[indexofPro], quantity: itemState[indexofPro].quantity + 1 };
+            pro = { ...itemState[indexofProduct], quantity: itemState[indexofProduct].quantity + 1 };
             ++quantity;
           }
-          handleModifyQuantityApi(itemState[indexofPro]._id, quantity)
+          //handleModifyQuantityApi(itemState[indexofProduct]._id, quantity)
         }
         return pro;
       }),

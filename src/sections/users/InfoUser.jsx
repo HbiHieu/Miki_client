@@ -8,6 +8,7 @@ function InfoUser() {
     const [isOpen, setIsOpen] = useState(false);
 
     const user = useRecoilValue(dataUser);
+    console.log(user)
 
     const toggle = () => {
         setIsOpen(!isOpen);
@@ -26,26 +27,11 @@ function InfoUser() {
                     </div>
                     <div className='flex gap-10 pb-10'>
                         <div className='flex-1 font-bold text-right text-black align'>
-                            <p className='pb-12'>Họ và tên</p>
-                            <p className='pb-12'>Giới tính</p>
-                            <p className=''>Ngày sinh</p>
+                            <p className='pb-12 text-left'>Họ và tên</p>
+                            <p className='text-left'>Ngày sinh</p>
                         </div>
                         <div className='flex-[2_2_0%] align text-left text-black font-medium'>
                             <p className='pb-12'>{user?.firstName}</p>
-                            <div className='flex pb-12'>
-                                <div className='flex'>
-                                    <input id='feMale' className='w-6 radio-sex ' name="fav_language" type='radio' value='Nữ' />
-                                    <label htmlFor='feMale' className='pl-4'>Nữ</label>
-                                </div>
-                                <div className='flex pl-8'>
-                                    <input id='male' className='w-6 radio-sex' name="fav_language" type='radio' value='Nam' />
-                                    <label htmlFor='male' className='pl-4'>Nam</label>
-                                </div>
-                                <div className='flex pl-8'>
-                                    <input id='other' className='w-6 radio-sex' name="fav_language" type='radio' value='Khác' />
-                                    <label htmlFor='other' className='pl-4'>Khác</label>
-                                </div>
-                            </div>
                             <p>04/03/2002</p>
                         </div>
                     </div>
@@ -63,12 +49,12 @@ function InfoUser() {
                     </div>
                     <div className='flex gap-10 pb-10'>
                         <div className='flex-1 font-bold text-right text-black align'>
-                            <p className='pb-12'>Số điện thoại</p>
-                            <p className='pb-12'>Email</p>
-                            <p className=''>Mật khẩu</p>
+                            <p className='pb-12 text-left'>Số điện thoại</p>
+                            <p className='pb-12 text-left'>Email</p>
+                            <p className='text-left'>Mật khẩu</p>
                         </div>
                         <div className='flex-[2_2_0%] align text-left text-black font-medium'>
-                            <p className='pb-12'>0912345678</p>
+                            <p className='pb-12'>{user?.phoneNumber}</p>
                             <p className='pb-12'>{user?.email}</p>
 
                             <p>********</p>

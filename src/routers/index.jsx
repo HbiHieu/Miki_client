@@ -14,6 +14,9 @@ import {
   MainAdminLayout,
   Console ,
   AdminProducts,
+  AdminAccounts,
+  AdminCategories,
+  AdminOrders,
   Profile
 } from "../Pages/index";
 
@@ -63,7 +66,19 @@ export const router = createBrowserRouter([
       {
         path:"/admin/Products" ,
         element:<AdminProducts/>
-      }
+      },
+      {
+        path:"/admin/Accounts" ,
+        element:<AdminAccounts/>
+      },
+      {
+        path:"/admin/Categories" ,
+        element:<AdminCategories/>
+      },
+      {
+        path:"/admin/Orders" ,
+        element:<AdminOrders/>
+      },
     ]
   } ,
   {

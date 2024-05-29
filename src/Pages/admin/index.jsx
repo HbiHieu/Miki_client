@@ -1,58 +1,88 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Bar } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+} from 'chart.js';
+import axios from "axios";
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 export default function Console() {
+    const [data,setData] = useState([]);
+    const [overview,setOverView] = useState([]);
+    const backgroundStatus = ["#4e73de","#858796","#1cc88a","#e74a3b"];
+
+    useEffect( () => {
+        async function fetch(){
+            const res = await axios({
+                method: 'GET',
+                url: 'https://localhost:7226/api/Statisticals',
+              });
+              console.log(res.data)
+              setData(res.data.data);
+              setOverView(res.data.overview);
+        }
+        fetch();
+    },[] )
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Doanh Thu Theo Ngày (đồng)',
+            },
+        },
+    };
+
+    const chartData = {
+        labels: data.map(entry => entry.date),
+        datasets: [
+            {
+                label: 'Doanh Thu',
+                data: data.map(entry => entry.revenue),
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+            },
+        ],
+    };
   return (
     <div className="bg-[#f8f9fd]">
-      <div className='p-[20px]'>
-            <div className='text-2xl'>Bảng điều khiển</div>
-            <div className='grid grid-cols-4 gap-8 py-4'>
-                <div className='border-l-[4px] rounded-[5px] border-blue-300 h-24 flex items-center shadow-[0px_-10px_30px_-10px_rgba(0,0,0,0.3)]'>
-                    <div className='ml-3 font-bold'>
-                        <p className='text-blue-300 '>DOANH THU THÁNG</p>
-                        <h3>225.000đ</h3>
-                    </div>
-                </div>
-                <div className='border-l-[4px] rounded-[5px] border-green-300 h-24 flex items-center shadow-[0px_-10px_30px_-10px_rgba(0,0,0,0.3)]'>
-                    <div className='ml-3 font-bold'>
-                        <p className='text-green-300 '>DOANH THU NĂM</p>
-                        <h3>225.000đ</h3>
-                    </div>
-                </div>
-                <div className='border-l-[4px] rounded-[5px] border-[#35bcc8] h-24 flex items-center shadow-[0px_-10px_30px_-10px_rgba(0,0,0,0.3)]'>
-                    <div className='ml-3 font-bold'>
-                        <p className='text-[#35bcc8]'>DOANH SỐ</p>
-                        <h3>225.000đ</h3>
-                    </div>
-                </div>
-                <div className='border-l-[4px] rounded-[5px] border-orange-400 h-24 flex items-center shadow-[0px_-10px_30px_-10px_rgba(0,0,0,0.3)]'>
-                    <div className='ml-3 font-bold'>
-                        <p className='text-orange-400 '>SẢN PHẨM</p>
-                        <h3>225.000đ</h3>
-                    </div>
-                </div>
-            </div>
+      <div className='p-[20px]'>            
             <div className='shadow-[0px_-10px_30px_-10px_rgba(0,0,0,0.3)] text-white mt-5'>
-                <p className='text-[#4e73de] font-bold p-[15px] border-b-[1px] border-[#ccc]'>Việc cần làm</p>
+                <p className='text-[#4e73de] font-bold p-[15px] border-b-[1px] border-[#ccc]'>Thống kê</p>
                 <div className='p-[30px] grid grid-cols-4 gap-8'>
-                    <div className='text-center bg-[#4e73de] h-[80px]'>
-                        <p className='mt-[15px]'>1</p>
-                        <p>Chờ xác nhận</p>
-                    </div>
-                    <div className='text-center bg-[#858796] h-[80px]'>
-                        <p className='mt-[15px]'>1</p>
-                        <p>Đang giao</p>
-                    </div>
-                    <div className='text-center bg-[#1cc88a] h-[80px]'>
-                        <p className='mt-[15px]'>1</p>
-                        <p>Đã giao</p>
-                    </div>
-                    <div className='text-center bg-[#e74a3b] h-[80px]'>
-                        <p className='mt-[15px]'>1</p>
-                        <p>Đã hủy</p>
-                    </div>
+                    {
+                        backgroundStatus.map( (item,index) => (
+                            <div className={`text-center bg-[${item}] h-[80px]`} style={{
+                                backgroundColor :item,
+                            }}>
+                                <p className='mt-[15px]'>{overview[index]?.soDonHang}</p>
+                                <p>{overview[index]?.name}</p>
+                             </div>
+                        ) )
+                    }
                 </div>
             </div>
         </div>
+        <Bar options={options} data={chartData} />
+        <div className="mb-10"></div>
     </div>
   );
 }

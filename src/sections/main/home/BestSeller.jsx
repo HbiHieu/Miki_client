@@ -40,7 +40,9 @@ export function BestSellerSection({ products }) {
                 <Animation gestures>
                   <img src={item?.pictures[0].url} alt="" className='w-[254px] h-[300px] object-contain object-center' />
                 </Animation>
+                <Link to={`/products/${item.id}`}>
                 <p className='min-h-[52px] mt-[24px] mb-[8px] text-[20px] font-bold leading-[26px]'>{item.name}</p>
+                </Link>                
                 <p className='text-primary_2 mb-[16px] text-[20px] leading-[28px] font-bold'>{formatter.format(item?.stocks[0]?.price)}</p>
                 <Link to={`/products/${item.id}`}>
                   <Button

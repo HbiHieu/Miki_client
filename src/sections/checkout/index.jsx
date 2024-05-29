@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { cartState } from "../../recoils/cartState";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { dataUser } from "../../recoils/dataUser";
 import { toast } from "react-toastify";
@@ -56,9 +56,10 @@ export default function Checkout() {
   const [user, setUser] = useRecoilState(dataUser);
   const [total, setTotal] = useState(() =>
     orderPro.reduce((total, product) => {
-      return total + product.quantity * product.cost;
+      return total + product.quantity * product.price;
     }, 0)
   );
+  const navigate = useNavigate();
 
   const handleAddProduct = (indexofPro, method) => {
     setOrderPro((prev) =>
@@ -76,11 +77,6 @@ export default function Checkout() {
         }
         return pro;
       })
-    );
-    setTotal(() =>
-      orderPro.reduce((total, product) => {
-        return total + product.quantity * product.cost;
-      }, 0)
     );
   };
 
@@ -100,20 +96,21 @@ export default function Checkout() {
     return stringCV[0] == "." ? stringCV.slice(1) : stringCV;
   };
 
-  const onSubmit = (data) => {
-    data["products"] = orderPro;
-    data["UserID"] = user.userInforId;
-    const res = axios({
-      method: 'POST',
-      url: 'https://localhost:7226/api/Order/AddOrder',
-      data: data
-    });
-    res.then(() => {
+  const onSubmit = async (data) => {
+    try {
+      data["products"] = orderPro;
+      data["UserID"] = user.userInforId;
+      const res = await axios({
+        method: "POST",
+        url: "https://localhost:7226/api/Order/AddOrder",
+        data: data,
+      });
+      console.log(data);
       toast.success("Đặt hàng thành công");
-      navigate('/');
-    })
-      .catch((e) => {toast.success("Đặt hàng thành công");navigate('/');});
-      
+      navigate("/");
+    } catch {
+      navigate("/");
+    }
   };
 
   const paymentCard = [
@@ -133,6 +130,14 @@ export default function Checkout() {
       icon: <Paypal />,
     },
   ];
+
+  useEffect(() => {
+    setTotal(() =>
+      orderPro.reduce((total, product) => {
+        return total + product.quantity * product.price;
+      }, 0)
+    );
+  }, [orderPro]);
 
   return (
     <>
@@ -403,14 +408,14 @@ export default function Checkout() {
               >
                 <div className="flex">
                   <img
-                    src={product?.picture}
+                    src={product?.url}
                     className="w-[56px] h-[56px] round-2"
                   />
                   <p className="ml-4 font-bold">{product.name}</p>
                 </div>
                 <div>
                   <p className="text-[20px] leading-[28px] font-bold">{`${convertNumberToStringMoney(
-                    product.cost
+                    product.price
                   )}đ`}</p>
                   <div className="flex items-center justify-between">
                     <button
@@ -453,7 +458,7 @@ export default function Checkout() {
             <div className="flex justify-between items-center mt-[32px] mx-[57px]">
               <p>Tổng</p>
               <p className="text-[20px] leading-[28px] font-bold">{`${convertNumberToStringMoney(
-                total
+                total - 240000
               )}đ`}</p>
             </div>
           </div>

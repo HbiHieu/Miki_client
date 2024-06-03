@@ -83,32 +83,40 @@ export function Header() {
             <IconDown className="ml-[14px] mt-[1px] cursor-pointer" />
             <div className="absolute top-[10px] left-0 w-[1136px] h-[186px] mt-[40px] z-20 bg-bgm justify-evenly font-medium leading-[24px] hidden group-hover:flex animate-growth origin-[20%_2%] pseudoDropdown hover:flex">
               <ul className="w-[254px] text-center h-[186px]">
-                <li className="pt-[2px] pb-[13px] font-bold">Nhẫn</li>
-                <li className="pb-[8px]">Nhẫn cỡ lớn</li>
-                <li className="pb-[8px]">Nhẫn ngón út</li>
-                <li className="pb-[8px]">Nhẫn xoay</li>
-                <li>Nhẫn cưới</li>
+                <Link to={"/products/category/Nhẫn"}>
+                 <li className="pt-[2px] pb-[13px] font-bold">Nhẫn</li>
+                 <li className="pb-[8px]">Nhẫn cỡ lớn</li>
+                 <li className="pb-[8px]">Nhẫn ngón út</li>
+                 <li className="pb-[8px]">Nhẫn xoay</li>
+                 <li>Nhẫn cưới</li>
+                </Link>
               </ul>
               <div className="h-[129px] border-solid border-l-[1px] border-neutral_1 mt-[21px]"></div>
               <ul className="w-[254px] text-center h-[186px]">
+                <Link to={"/products/category/Dây chuyền"}>
                 <li className="pt-[2px] pb-[13px] font-bold">Dây chuyền</li>
                 <li className="pb-[8px]">Dây chuyền trơn</li>
                 <li className="pb-[8px]">Dây chuyền có mặt</li>
                 <li>Mặt dây chuyền</li>
+                </Link>
               </ul>
               <div className="h-[129px] border-solid border-l-[1px] border-neutral_1 mt-[21px]"></div>
               <ul className="w-[254px] text-center h-[186px]">
+                <Link to={"/products/category/Bông tai"}>
                 <li className="pt-[2px] pb-[13px] font-bold">Bông tai</li>
                 <li className="pb-[8px]">Bông tai xỏ lỗ</li>
                 <li className="pb-[8px]">Bông tai treo</li>
                 <li>Khuyên vành tai</li>
+                </Link>                
               </ul>
               <div className="h-[129px] border-solid border-l-[1px] border-neutral_1 mt-[21px]"></div>
               <ul className="w-[254px] text-center h-[186px]">
+                <Link to={"/products/category/Lắc"}>
                 <li className="pt-[2px] pb-[13px] font-bold">Lắc</li>
                 <li className="pb-[8px]">Lắc tay</li>
                 <li className="pb-[8px]">Lắc chân</li>
                 <li>Charm</li>
+                </Link>                
               </ul>
             </div>
           </div>

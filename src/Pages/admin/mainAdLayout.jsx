@@ -58,7 +58,7 @@ export default function MainAdLayout() {
                                         </>
                                         </Link>
                                         <Link to='/admin/Categories'>
-                                        <li className='p-2 cursor-pointer hover:bg-gray-200'>Thể loại</li>
+                                        <li className='p-2 cursor-pointer hover:bg-gray-200'>Danh mục sản phẩm</li>
                                         </Link>                                                         <Link to='/admin/Orders'>
                                         <li className='p-2 cursor-pointer hover:bg-gray-200'>Đơn hàng</li>
                                         </Link>                       

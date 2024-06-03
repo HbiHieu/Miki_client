@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -11,6 +11,9 @@ import BreadCrumb from "../../Components/BreadCrumb.jsx";
 function ProductsPage(props) {
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(null);
+  const param = useParams();
+
+  console.log(param);
 
   const [sort, setSort] = useState("name&order=asc");
 
@@ -23,13 +26,15 @@ function ProductsPage(props) {
 
   useEffect(() => {
     dataProducts();
-  }, [page, sort]);
+  }, [page, sort,param.category]);
 
   const dataProducts = (data) => {
     try {
       const res = axios({
         method: "GET",
-        url:`https://localhost:7226/api/Products?page=${page}&sortBy=${sort}`,
+        url: `https://localhost:7226/api/Products?page=${page}&sortBy=${sort}${
+          param.category ? "&keySearch=" + param.category : ""
+        }`,
       });
       res.then((response) => {
         const datas = response.data;

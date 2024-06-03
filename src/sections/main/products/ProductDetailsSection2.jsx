@@ -278,7 +278,7 @@ export default function ProductDetailsSection2({ product }) {
                 rating={item.rating}
                 commentsId={item.id}
                 setUpdate={setUpdate}
-          />
+            />
             ) )
           }
           <div className="w-full py-[17px] px-[58px] mt-[24px] bg-[#FFFFFF]">

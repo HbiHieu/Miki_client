@@ -38,6 +38,10 @@ export const router = createBrowserRouter([
         element: <Recruit />,
       },
       {
+        path: "/products/category/:category",
+        element: <Products />,
+      },
+      {
         path: "/products",
         element: <Products />,
       },
